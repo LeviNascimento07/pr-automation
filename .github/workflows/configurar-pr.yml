@@ -20,8 +20,16 @@ jobs:
       - name: Extrair dados do HISTORICO.md
         id: extrair
         run: |
-          # Pega o nome do card ex: TESTE SW-0001
-           CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.md | head -1)
+          echo "=== Conteudo do HISTORICO.md ==="
+          cat HISTORICO.md
+          echo "=== Testando grep CARD ==="
+          grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.md | head -1
+          echo "=== Testando grep DESCRICAO ==="
+          grep -oP '(?<=\]\] ).+' HISTORICO.md | head -1
+          echo "=== Testando grep LINK ==="
+          grep -oP 'https://trello\.com/\S+' HISTORICO.md | head -1
+
+          CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.md | head -1)
           DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.md | head -1)
           LINK=$(grep -oP 'https://trello\.com/\S+' HISTORICO.md | head -1)
 
