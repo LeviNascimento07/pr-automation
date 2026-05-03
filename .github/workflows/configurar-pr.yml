@@ -2,7 +2,7 @@ name: Configurar PR
 
 on:
   pull_request:
-    types: [opened]
+    types: [ opened ]
     branches:
       - homologacao
 
@@ -16,18 +16,24 @@ jobs:
     steps:
       - name: Checkout da branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Extrair dados do HISTORICO.md
         id: extrair
         run: |
-          # Pega o nome do card ex: TESTE SW-0001
-          CARD=$(grep -oP '(?<=\[\[)[^\]]+(?=\]\])' HISTORICO.md | head -1)
+          echo "=== Conteudo do HISTORICO.MD ==="
+          cat HISTORICO.MD
+          echo "=== Testando grep CARD ==="
+          grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1
+          echo "=== Testando grep DESCRICAO ==="
+          grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1
+          echo "=== Testando grep LINK ==="
+          grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1
 
-          # Pega a descrição da tarefa
-          DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.md | head -1)
-
-          # Pega o link do Trello
-          LINK=$(grep -oP '(?<=\]: )https://trello\.com/\S+' HISTORICO.md | head -1)
+          CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1)
+          DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1)
+          LINK=$(grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1)
 
           echo "card=$CARD" >> $GITHUB_OUTPUT
           echo "descricao=$DESCRICAO" >> $GITHUB_OUTPUT
@@ -71,15 +77,4 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               labels: ['Aguardando revisão', 'Aguardando teste']
-            });
-
-      - name: Adicionar reviewer
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              reviewers: ['LeviNascimento07']
             });
