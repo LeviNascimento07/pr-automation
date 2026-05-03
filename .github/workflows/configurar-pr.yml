@@ -1,0 +1,80 @@
+name: Configurar PR
+
+on:
+  pull_request:
+    types: [ opened ]
+    branches:
+      - homologacao
+
+jobs:
+  configurar:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout da branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Extrair dados do HISTORICO.md
+        id: extrair
+        run: |
+          echo "=== Conteudo do HISTORICO.MD ==="
+          cat HISTORICO.MD
+          echo "=== Testando grep CARD ==="
+          grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1
+          echo "=== Testando grep DESCRICAO ==="
+          grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1
+          echo "=== Testando grep LINK ==="
+          grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1
+
+          CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1)
+          DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1)
+          LINK=$(grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1)
+
+          echo "card=$CARD" >> $GITHUB_OUTPUT
+          echo "descricao=$DESCRICAO" >> $GITHUB_OUTPUT
+          echo "link=$LINK" >> $GITHUB_OUTPUT
+
+      - name: Atualizar descrição do PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const card = `${{ steps.extrair.outputs.card }}`;
+            const descricao = `${{ steps.extrair.outputs.descricao }}`;
+            const link = `${{ steps.extrair.outputs.link }}`;
+
+            const body = `## 📋 Informações da tarefa
+
+            **Card:** ${card}
+
+            ## 📝 Descrição
+            ${descricao}
+
+            ## 🔗 Link do cartão
+            ${link}
+
+            ## ✅ Checklist
+            - [ ] Ajustado o histórico de versão;
+            - [ ] Verificadas todas as permissões necessárias na tarefa;`;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              body: body
+            });
+
+      - name: Aplicar labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['Aguardando revisão', 'Aguardando teste']
+            });
