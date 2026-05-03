@@ -73,13 +73,4 @@ jobs:
               labels: ['Aguardando revisão', 'Aguardando teste']
             });
 
-      - name: Adicionar reviewer
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              reviewers: ['LeviNascimento07']
-            });
+      
