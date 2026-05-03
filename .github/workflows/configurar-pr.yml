@@ -2,7 +2,7 @@ name: Configurar PR
 
 on:
   pull_request:
-    types: [opened]
+    types: [ opened ]
     branches:
       - homologacao
 
@@ -21,13 +21,9 @@ jobs:
         id: extrair
         run: |
           # Pega o nome do card ex: TESTE SW-0001
-          CARD=$(grep -oP '(?<=\[\[)[^\]]+(?=\]\])' HISTORICO.md | head -1)
-
-          # Pega a descrição da tarefa
+           CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.md | head -1)
           DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.md | head -1)
-
-          # Pega o link do Trello
-          LINK=$(grep -oP '(?<=\]: )https://trello\.com/\S+' HISTORICO.md | head -1)
+          LINK=$(grep -oP 'https://trello\.com/\S+' HISTORICO.md | head -1)
 
           echo "card=$CARD" >> $GITHUB_OUTPUT
           echo "descricao=$DESCRICAO" >> $GITHUB_OUTPUT
@@ -72,5 +68,3 @@ jobs:
               issue_number: context.payload.pull_request.number,
               labels: ['Aguardando revisão', 'Aguardando teste']
             });
-
-      
