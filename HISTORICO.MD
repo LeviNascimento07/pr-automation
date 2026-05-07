@@ -12,6 +12,16 @@
 
 ## [1.0.2] - 2026-05-06
 #### Adiciona
+- [[TESTE SW-0004]] Testando fluxo em outra maquina.
+
+#### Modifica
+
+#### Corrige
+
+[TESTE SW-0004]: https://trello.com/c/LINKDETESTE3
+
+## [1.0.2] - 2026-05-06
+#### Adiciona
 - [[TESTE SW-0003]] Testando fluxo completo da automação de PR.
 
 #### Modifica
