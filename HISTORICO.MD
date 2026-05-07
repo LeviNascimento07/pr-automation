@@ -2,6 +2,16 @@
 
 ## [1.0.5] - 2026-05-06
 #### Adiciona
+- [[TESTE SW-0022]] rafael teste 2.
+
+#### Modifica
+
+#### Corrige
+
+[TESTE SW-0022]: https://trello.com/c/LINKDETESTE22
+
+## [1.0.5] - 2026-05-06
+#### Adiciona
 - [[TESTE SW-0005]] Testando fluxo completo da automação de PR e fazendo push automatico.
 
 #### Modifica
