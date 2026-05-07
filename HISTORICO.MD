@@ -1,5 +1,15 @@
 # Histórico de versões
 
+## [1.0.5] - 2026-05-06
+#### Adiciona
+- [[TESTE SW-0005]] Testando fluxo completo da automação de PR e fazendo push automatico.
+
+#### Modifica
+
+#### Corrige
+
+[TESTE SW-0005]: https://trello.com/c/LINKDETESTE5
+
 ## [1.0.2] - 2026-05-06
 #### Adiciona
 - [[TESTE SW-0003]] Testando fluxo completo da automação de PR.
@@ -8,7 +18,7 @@
 
 #### Corrige
 
-[TESTE SW-0003]: https://trello.com/c/LINKDETESTE3
+[TESTE SW-0004]: https://trello.com/c/LINKDETESTE3
 
 ## [1.0.1] - 2026-05-03
 #### Adiciona
