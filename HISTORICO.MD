@@ -1,5 +1,15 @@
 # Histórico de versões
 
+## [1.0.4] - 2026-05-06
+#### Adiciona
+- [[TESTE SW-0003]] Teste rafael.
+
+#### Modifica
+
+#### Corrige
+
+[TESTE SW-0003]: https://trello.com/c/LINKDETESTE3
+
 ## [1.0.2] - 2026-05-06
 #### Adiciona
 - [[TESTE SW-0003]] Testando fluxo completo da automação de PR.
