@@ -24,18 +24,14 @@ jobs:
         run: |
           echo "=== Conteudo do HISTORICO.MD ==="
           cat HISTORICO.MD
-          echo "=== Testando grep CARD ==="
-          grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1
           echo "=== Testando grep DESCRICAO ==="
           grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1
           echo "=== Testando grep LINK ==="
           grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1
 
-          CARD=$(grep -oP '\[\[\K[^\]]+(?=\]\])' HISTORICO.MD | head -1)
           DESCRICAO=$(grep -oP '(?<=\]\] ).+' HISTORICO.MD | head -1)
           LINK=$(grep -oP 'https://trello\.com/\S+' HISTORICO.MD | head -1)
 
-          echo "card=$CARD" >> $GITHUB_OUTPUT
           echo "descricao=$DESCRICAO" >> $GITHUB_OUTPUT
           echo "link=$LINK" >> $GITHUB_OUTPUT
 
@@ -43,14 +39,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const card = `${{ steps.extrair.outputs.card }}`;
             const descricao = `${{ steps.extrair.outputs.descricao }}`;
             const link = `${{ steps.extrair.outputs.link }}`;
 
             const body = `## 📋 Informações da tarefa
-
-            **Card:** ${card}
-
+            
             ## 📝 Descrição
             ${descricao}
 
